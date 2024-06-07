@@ -14,26 +14,45 @@ public class DAO_Proveedores implements OperacionesBasicas {
     
     Config bd = new Config();
     
-    @Override
     public boolean insertar(Object obj) {
         Proveedores proveedor = (Proveedores) obj;
         try {
             Connection con = null;
             PreparedStatement pst = null;
-            String sql = "INSERT INTO Proveedores (proveedor_id, nombre_proveedor) VALUES (?, ?)";
+            ResultSet rs = null;
+
+            // Obtener el ID máximo de proveedor actual en la base de datos
+            int maxProveedorID = 0;
+            String sqlMaxID = "SELECT MAX(proveedor_id) FROM Proveedores";
 
             Class.forName(bd.getDriver());
             con = DriverManager.getConnection(bd.getUrl(), bd.getUsuario(), bd.getContrasena());
 
+            pst = con.prepareStatement(sqlMaxID);
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                maxProveedorID = rs.getInt(1);
+            }
+
+            // Generar un nuevo ID único mayor que el máximo actual
+            int nuevoProveedorID = maxProveedorID + 1;
+
+            // Preparar la consulta SQL para insertar el nuevo proveedor
+            String sql = "INSERT INTO Proveedores (proveedor_id, nombre_proveedor) VALUES (?, ?)";
             pst = con.prepareStatement(sql);
 
-            pst.setInt(1, proveedor.getProveedor_id());
+            // Asignar los valores al PreparedStatement
+            pst.setInt(1, nuevoProveedorID);
             pst.setString(2, proveedor.getNombre_proveedor());
 
+            // Ejecutar la consulta y verificar si se insertó correctamente
             int filasAfectadas = pst.executeUpdate();
 
+            // Cerrar recursos
             con.close();
             pst.close();
+            rs.close();
 
             return filasAfectadas > 0;
 
