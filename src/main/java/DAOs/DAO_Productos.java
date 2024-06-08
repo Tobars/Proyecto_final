@@ -25,8 +25,8 @@ public class DAO_Productos implements OperacionesBasicas {
     public boolean insertar(Object obj) {
         try {
             Connection con = DriverManager.getConnection(this.bd.getUrl(), this.bd.getUsuario(), this.bd.getContrasena());
-            String maxIdQuery = "SELECT MAX(producto_id) FROM tblProductos";
-            String sql = "INSERT INTO tblProductos (producto_id, nombre_producto, precio, inStock, foto, categoria_id) VALUES (?, ?, ?, ?, ?, ?)";
+            String maxIdQuery = "SELECT MAX(producto_id) FROM productos";
+            String sql = "INSERT INTO productos (producto_id, nombre_producto, precio, inStock, foto, categoria_id) VALUES (?, ?, ?, ?, ?, ?)";
 
             PreparedStatement pstMaxId = con.prepareStatement(maxIdQuery);
             ResultSet rsMaxId = pstMaxId.executeQuery();
@@ -46,7 +46,7 @@ public class DAO_Productos implements OperacionesBasicas {
 
             int filasAfectadas = pst.executeUpdate();
 
-            // Registrar el detalle del proceso si la inserción fue exitosa
+            // Registrar el detalle del proceso si el insertar fue exitoso
             if (filasAfectadas > 0) {
                 registrarDetalleProceso(nuevoId, 1); // 1 para Agregar Producto
             }
@@ -85,7 +85,7 @@ public class DAO_Productos implements OperacionesBasicas {
             this.producto = (Productos) obj;
             Connection con = null;
             PreparedStatement pst = null;
-            String sql = "UPDATE Productos SET nombre_producto = ?, precio = ?, inStock = ?, foto = ?, categoria_id = ? WHERE producto_id = ?";
+            String sql = "UPDATE productos SET nombre_producto = ?, precio = ?, inStock = ?, foto = ?, categoria_id = ? WHERE producto_id = ?";
 
             Class.forName(this.bd.getDriver());
             con = DriverManager.getConnection(this.bd.getUrl(), this.bd.getUsuario(), this.bd.getContrasena());
@@ -99,7 +99,7 @@ public class DAO_Productos implements OperacionesBasicas {
             pst.setInt(6, this.producto.getProducto_id());
 
             int filasAfectadas = pst.executeUpdate();
-            
+
             // Registrar detalle del proceso
             registrarDetalleProceso(this.producto.getProducto_id(), 3); // 3 para Modificar Producto
 
@@ -114,7 +114,7 @@ public class DAO_Productos implements OperacionesBasicas {
     public boolean existeProducto(int productoID) {
         try {
             Connection con = DriverManager.getConnection(this.bd.getUrl(), this.bd.getUsuario(), this.bd.getContrasena());
-            String sql = "SELECT * FROM Productos WHERE producto_id=?";
+            String sql = "SELECT * FROM productos WHERE producto_id=?";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setInt(1, productoID);
             ResultSet rs = pst.executeQuery();
@@ -134,7 +134,7 @@ public class DAO_Productos implements OperacionesBasicas {
         try {
             Connection con = null;
             PreparedStatement pst = null;
-            String sql = "DELETE FROM Productos WHERE producto_id = ?";
+            String sql = "DELETE FROM productos WHERE producto_id = ?";
 
             Class.forName(this.bd.getDriver());
             con = DriverManager.getConnection(this.bd.getUrl(), this.bd.getUsuario(), this.bd.getContrasena());
@@ -167,7 +167,7 @@ public class DAO_Productos implements OperacionesBasicas {
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
-        String sql = "SELECT * FROM Productos";
+        String sql = "SELECT * FROM productos";
 
         try {
             Class.forName(this.bd.getDriver());
@@ -205,15 +205,15 @@ public class DAO_Productos implements OperacionesBasicas {
     public boolean eliminarProductosEnCategoria(int categoriaID) {
         try {
             Connection con = DriverManager.getConnection(this.bd.getUrl(), this.bd.getUsuario(), this.bd.getContrasena());
-            String sql = "DELETE FROM Productos WHERE categoria_id=?";
+            String sql = "DELETE FROM productos WHERE categoria_id=?";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setInt(1, categoriaID);
             int filasAfectadas = pst.executeUpdate();
             pst.close();
             con.close();
-            return filasAfectadas > 0; // Devuelve true si se eliminaron productos, false si no se eliminaron
+            return filasAfectadas > 0; // devuelve true si se eliminaron productos, false si no se eliminaron
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al eliminar productos de la categoría: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al eliminar productos de la categoria: " + ex.getMessage());
             return false;
         }
     }
@@ -222,16 +222,16 @@ public class DAO_Productos implements OperacionesBasicas {
     public boolean productosEnCategoria(int categoriaID) {
         try {
             Connection con = DriverManager.getConnection(this.bd.getUrl(), this.bd.getUsuario(), this.bd.getContrasena());
-            String sql = "SELECT COUNT(*) FROM Productos WHERE categoria_id=?";
+            String sql = "SELECT COUNT(*) FROM productos WHERE categoria_id=?";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setInt(1, categoriaID);
             ResultSet rs = pst.executeQuery();
             rs.next(); // Mover el cursor al primer resultado
-            int count = rs.getInt(1); // Obtener el valor del primer resultado (el recuento de productos)
+            int count = rs.getInt(1); // Obtener el valor del primer resultado
             rs.close();
             pst.close();
             con.close();
-            return count > 0; // Devolver true si hay productos en la categoría, false si no los hay
+            return count > 0; // Devolver true si hay productos en la categoria, false si no los hay
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al verificar la existencia de productos en la categoría: " + ex.getMessage());
             return false;
@@ -247,9 +247,9 @@ public class DAO_Productos implements OperacionesBasicas {
 
         try {
             // Construir la consulta SQL base
-            String sql = "SELECT * FROM Productos WHERE 1=1";
+            String sql = "SELECT * FROM productos WHERE 1=1";
 
-            // Añadir condiciones a la consulta según los campos proporcionados
+
             if (!nombre.isEmpty()) {
                 sql += " AND nombre_producto LIKE ?";
             }
@@ -260,13 +260,13 @@ public class DAO_Productos implements OperacionesBasicas {
                 sql += " AND categoria_id = ?";
             }
 
-            // Establecer la conexión y preparar la consulta
+            // Establecer la conexion y preparar la consulta
             Class.forName(this.bd.getDriver());
             con = DriverManager.getConnection(this.bd.getUrl(), this.bd.getUsuario(), this.bd.getContrasena());
             pst = con.prepareStatement(sql);
 
-            // Configurar los parámetros de la consulta según los valores proporcionados
-            int paramIndex = 1; // Índice para los parámetros en la consulta preparada
+            // Configurar los parametros de la consulta segun los valores proporcionados
+            int paramIndex = 1; // indice para los parametros en la consulta preparada
             if (!nombre.isEmpty()) {
                 pst.setString(paramIndex++, "%" + nombre + "%"); // Utilizamos "%" para buscar coincidencias parciales en el nombre
             }
@@ -310,6 +310,35 @@ public class DAO_Productos implements OperacionesBasicas {
         return datosFiltrados;
     }
 
-    
+    public float calcularTotalProductos() {
+        float total = 0;
+        try {
+            Connection con = null;
+            PreparedStatement pst = null;
+            ResultSet rs = null;
+
+            // Consulta SQL para obtener el total de productos multiplicando el precio por el stock
+            String sql = "SELECT SUM(precio * inStock) AS total FROM productos";
+
+            // Establecer la conexion y ejecutar la consulta
+            Class.forName(this.bd.getDriver());
+            con = DriverManager.getConnection(this.bd.getUrl(), this.bd.getUsuario(), this.bd.getContrasena());
+            pst = con.prepareStatement(sql);
+            rs = pst.executeQuery();
+
+            // Obtener el total de la consulta
+            if (rs.next()) {
+                total = rs.getFloat("total");
+            }
+
+            // Cerrar recursos
+            rs.close();
+            pst.close();
+            con.close();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error al calcular el total de productos: " + ex.getMessage());
+        }
+        return total;
+    }
 
 }

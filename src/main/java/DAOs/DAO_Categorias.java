@@ -130,14 +130,14 @@ public class DAO_Categorias implements OperacionesBasicas {
             // Verificar si hay productos asociados a esta categoría
             DAO_Productos daoProductos = new DAO_Productos();
             if (daoProductos.productosEnCategoria(this.categoria.getCategoria_id())) {
-                // Si hay productos asociados, mostrar un mensaje de advertencia y ofrecer opciones al usuario
-                int option = JOptionPane.showConfirmDialog(null, "Esta categoría contiene productos. ¿Desea eliminar los productos y la categoría?", "Advertencia", JOptionPane.YES_NO_OPTION);
+                // Si hay productos asociados, mostrar un mensaje de advertencia 
+                int option = JOptionPane.showConfirmDialog(null, "Esta categoria contiene productos. Desea eliminar los productos y la categoria?", "Advertencia", JOptionPane.YES_NO_OPTION);
                 if (option == JOptionPane.YES_OPTION) {
-                    // Si el usuario confirma, eliminar todos los productos asociados a la categoría
+                    // Si el usuario confirma, eliminar todos los productos asociados a la categoria
                     boolean eliminado = daoProductos.eliminarProductosEnCategoria(this.categoria.getCategoria_id());
                     if (!eliminado) {
                         // Si no se pueden eliminar los productos, mostrar un mensaje y salir
-                        JOptionPane.showMessageDialog(null, "No se pudieron eliminar los productos asociados. No se puede eliminar la categoría.");
+                        JOptionPane.showMessageDialog(null, "No se pudieron eliminar los productos asociados. No se puede eliminar la categoria.");
                         return false;
                     }
                 } else {
@@ -146,7 +146,7 @@ public class DAO_Categorias implements OperacionesBasicas {
                 }
             }
 
-            // Si no hay productos asociados o si se eliminaron con éxito, proceder con la eliminación de la categoría
+            // Si no hay productos asociados o si se eliminaron con exito, proceder con la eliminacion de la categoria
             Connection con = null;
             PreparedStatement pst = null;
             String sql = "DELETE FROM Categorias WHERE categoria_id = ?";
@@ -163,7 +163,7 @@ public class DAO_Categorias implements OperacionesBasicas {
             pst.close();
 
             // Registrar el detalle del proceso
-            registrarDetalleProceso(this.categoria.getCategoria_id(), 8); // 8 para Borrar Categoría
+            registrarDetalleProceso(this.categoria.getCategoria_id(), 8); // 8 para Borrar Categoria
 
             return filasAfectadas > 0;
 
@@ -209,7 +209,7 @@ public class DAO_Categorias implements OperacionesBasicas {
         return datos;
     }
     public int obtenerIdCategoriaPorNombre(String nombreCategoria) {
-        int categoriaID = 0; // Inicializamos el ID de categoría como 0 por defecto
+        int categoriaID = 0; //ID de categoria como 0 por defecto
 
         try {
             Connection con = null;
@@ -226,7 +226,7 @@ public class DAO_Categorias implements OperacionesBasicas {
             pst.setString(1, nombreCategoria);
             rs = pst.executeQuery();
 
-            // Si se encuentra una categoría con el nombre especificado, asignamos su ID a categoriaID
+            // Si se encuentra una categoria con el nombre especificado, asignamos su ID a categoriaID
             if (rs.next()) {
                 categoriaID = rs.getInt("categoria_id");
             }
@@ -250,7 +250,7 @@ public class DAO_Categorias implements OperacionesBasicas {
             PreparedStatement pst = null;
             ResultSet rs = null;
 
-            // Consulta SQL para seleccionar todas las categorías
+            // Consulta SQL para seleccionar todas las categoias
             String sql = "SELECT * FROM Categorias";
 
             Class.forName(this.bd.getDriver());
@@ -275,7 +275,7 @@ public class DAO_Categorias implements OperacionesBasicas {
             rs.close();
 
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error al obtener categorías: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al obtener categorias: " + ex.getMessage());
         }
 
         return categorias;

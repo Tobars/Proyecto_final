@@ -21,7 +21,7 @@ public class DAO_Proveedores implements OperacionesBasicas {
             PreparedStatement pst = null;
             ResultSet rs = null;
 
-            // Obtener el ID máximo de proveedor actual en la base de datos
+            // Obtener el ID maximo de proveedor actual en la base de datos
             int maxProveedorID = 0;
             String sqlMaxID = "SELECT MAX(proveedor_id) FROM Proveedores";
 
@@ -35,7 +35,7 @@ public class DAO_Proveedores implements OperacionesBasicas {
                 maxProveedorID = rs.getInt(1);
             }
 
-            // Generar un nuevo ID único mayor que el máximo actual
+            // Generar un nuevo ID unico mayor que el maximo actual
             int nuevoProveedorID = maxProveedorID + 1;
 
             // Preparar la consulta SQL para insertar el nuevo proveedor
@@ -46,10 +46,9 @@ public class DAO_Proveedores implements OperacionesBasicas {
             pst.setInt(1, nuevoProveedorID);
             pst.setString(2, proveedor.getNombre_proveedor());
 
-            // Ejecutar la consulta y verificar si se insertó correctamente
+            // Ejecutar la consulta y verificar si se inserto correctamente
             int filasAfectadas = pst.executeUpdate();
 
-            // Cerrar recursos
             con.close();
             pst.close();
             rs.close();
