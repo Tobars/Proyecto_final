@@ -603,7 +603,20 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="-2" pref="265" max="-2" attributes="0"/>
                       <Component id="lblInformacion_productos" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="btnProducto_actualizar" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
+                              <Component id="lblProductos_precio_total" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="132" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="137" max="-2" attributes="0"/>
+                              <Component id="lblProductos_preciototal_texto" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
                       <Component id="lblPanel_de_control_productos" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="92" max="-2" attributes="0"/>
                   </Group>
@@ -653,7 +666,7 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Component id="txtProductos_productoid" alignment="1" min="-2" pref="100" max="-2" attributes="0"/>
                                                   <Component id="btnProductos_eliminar" alignment="1" min="-2" pref="100" max="-2" attributes="0"/>
-                                                  <Component id="jButton3" alignment="1" min="-2" pref="100" max="-2" attributes="0"/>
+                                                  <Component id="btnProductos_confirmar" alignment="1" min="-2" pref="100" max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
                                       </Group>
@@ -671,7 +684,7 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="lblProducto_cantidad" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="cantidad" min="-2" pref="100" max="-2" attributes="0"/>
+                                      <Component id="txtProducto_cantidad" min="-2" pref="100" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="lblProducto_foto" min="-2" max="-2" attributes="0"/>
@@ -688,14 +701,24 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                               <Component id="lblInformacion_productos" min="-2" pref="52" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
-                              <Component id="lblPanel_de_control_productos" min="-2" pref="52" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="lblProductos_preciototal_texto" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="lblProductos_precio_total" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="btnProducto_actualizar" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <Component id="lblPanel_de_control_productos" min="-2" pref="52" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -708,12 +731,12 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="btnProductos_modificar" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton3" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnProductos_confirmar" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="lblProducto_productoid" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="txtProductos_productoid" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblProducto_productoid" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
@@ -728,7 +751,7 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="lblProducto_cantidad" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="cantidad" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtProducto_cantidad" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
@@ -834,12 +857,12 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnProductos_modificarActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton3">
+            <Component class="javax.swing.JButton" name="btnProductos_confirmar">
               <Properties>
-                <Property name="text" type="java.lang.String" value="jButton3"/>
+                <Property name="text" type="java.lang.String" value="Confirmar"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnProductos_confirmarActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblProducto_busqueda">
@@ -917,9 +940,9 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtProductos_precioActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JTextField" name="cantidad">
+            <Component class="javax.swing.JTextField" name="txtProducto_cantidad">
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cantidadActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtProducto_cantidadActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="txtProductos_foto">
@@ -943,6 +966,24 @@
             <Component class="javax.swing.JLabel" name="lblProducto_categoriaid">
               <Properties>
                 <Property name="text" type="java.lang.String" value="ID Categoria"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblProductos_precio_total">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="jLabel1"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnProducto_actualizar">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Actualizar"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnProducto_actualizarActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblProductos_preciototal_texto">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Precio total Inventario"/>
               </Properties>
             </Component>
           </SubComponents>

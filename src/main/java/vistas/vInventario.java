@@ -43,7 +43,7 @@ public class vInventario extends javax.swing.JFrame {
 
         txtProductos_nombre.setEnabled(false);
         txtProductos_precio.setEnabled(false);
-        cantidad.setEnabled(false);
+        txtProducto_cantidad.setEnabled(false);
         txtProductos_foto.setEnabled(false);
         txtProductos_categoriaid.setEnabled(false);
 
@@ -72,9 +72,28 @@ public class vInventario extends javax.swing.JFrame {
                 }
             }
         });
+        // Agregar el ListSelectionListener a la tabla de Productos
+        tblProductos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent event) {
+                int filaSeleccionada = tblProductos.getSelectedRow();
+                if (filaSeleccionada != -1) {
+                    // Si se selecciona una fila, habilitar los botones de eliminar y modificar
+                    btnProductos_eliminar.setEnabled(true);
+                    btnProductos_modificar.setEnabled(true);
+                    btnProductos_confirmar.setEnabled(true);
+                    
+                } else {
+                    // Si no se selecciona ninguna fila, deshabilitar los botones de eliminar y modificar
+                    btnProductos_eliminar.setEnabled(false);
+                    btnProductos_modificar.setEnabled(false);
+                    btnProductos_confirmar.setEnabled(false);
+                }
+            }
+        });
 
 
-        // Agregar el ListSelectionListener a la tabla de categorías
+        // Agregar el ListSelectionListener a la tabla de categorias
         tblCategorias.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent event) {
@@ -102,12 +121,20 @@ public class vInventario extends javax.swing.JFrame {
     }
     
 
+        // Metodo para cargar datos de productos en la tabla
         private void CargarTablaProductos() {
+            // Obtener datos de productos utilizando el metodo seleccionar() del objeto daoProductos
             ArrayList<Object[]> datosProductos = this.daoProductos.seleccionar();
+
+            // Limpiar el modelo de la tabla para asegurarse de que este vacio
             modeloProductos.setNumRows(0);
+
+            // Iterar sobre los datos obtenidos y agregar cada fila al modelo de la tabla
             for (Object[] fila : datosProductos) {
                 modeloProductos.addRow(fila);
             }
+
+            // Establecer el modelo actualizado en la tabla
             this.tblProductos.setModel(modeloProductos);
         }
 
@@ -148,16 +175,35 @@ public class vInventario extends javax.swing.JFrame {
         this.tblRegistros.setModel(modeloRegistros);
     }*/
 
+            // Metodo para manejar el clic en la tabla de productos
         private void tblProductosMouseClicked(java.awt.event.MouseEvent evt) {
-            int filaSeleccionada = tblProductos.getSelectedRow();
+        // Obtener la fila seleccionada en la tabla
+        int filaSeleccionada = tblProductos.getSelectedRow();
+
+        // Verificar si se ha seleccionado alguna fila
+        if (filaSeleccionada != -1) {
+            // Obtener el modelo de la tabla
             DefaultTableModel modelo = (DefaultTableModel) tblProductos.getModel();
-            txtProductos_productoid.setText(modelo.getValueAt(filaSeleccionada, 0).toString());
-            txtProductos_nombre.setText(modelo.getValueAt(filaSeleccionada, 1).toString());
-            txtProductos_precio.setText(modelo.getValueAt(filaSeleccionada, 2).toString());
-            cantidad.setText(modelo.getValueAt(filaSeleccionada, 3).toString());
-            txtProductos_foto.setText(modelo.getValueAt(filaSeleccionada, 4).toString());
-            txtProductos_categoriaid.setText(modelo.getValueAt(filaSeleccionada, 5).toString());
+
+            // Obtener los datos del producto seleccionado en la fila
+            Object productoID = modelo.getValueAt(filaSeleccionada, 0);
+            Object nombreProducto = modelo.getValueAt(filaSeleccionada, 1);
+            Object precio = modelo.getValueAt(filaSeleccionada, 2);
+            Object cantidad = modelo.getValueAt(filaSeleccionada, 3);
+            Object foto = modelo.getValueAt(filaSeleccionada, 4);
+            Object categoriaID = modelo.getValueAt(filaSeleccionada, 5);
+
+            // Establecer los valores de los campos de texto con los datos del producto seleccionado
+            txtProductos_productoid.setText(String.valueOf(productoID));
+            txtProductos_nombre.setText(String.valueOf(nombreProducto));
+            txtProductos_precio.setText(String.valueOf(precio));
+            txtProducto_cantidad.setText(String.valueOf(cantidad));
+            txtProductos_foto.setText(String.valueOf(foto));
+            txtProductos_categoriaid.setText(String.valueOf(categoriaID));
         }
+    
+    }
+
         
 
     private void tblCategoriasMouseClicked(java.awt.event.MouseEvent evt) {
@@ -269,7 +315,7 @@ public class vInventario extends javax.swing.JFrame {
         lblPanel_de_control_productos = new javax.swing.JLabel();
         btnProductos_eliminar = new javax.swing.JButton();
         btnProductos_modificar = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnProductos_confirmar = new javax.swing.JButton();
         lblProducto_busqueda = new javax.swing.JLabel();
         txtProducto_productoid = new javax.swing.JTextField();
         lblProducto_busqueda_productoid = new javax.swing.JLabel();
@@ -285,11 +331,14 @@ public class vInventario extends javax.swing.JFrame {
         lblProducto_cantidad = new javax.swing.JLabel();
         lblProducto_foto = new javax.swing.JLabel();
         txtProductos_precio = new javax.swing.JTextField();
-        cantidad = new javax.swing.JTextField();
+        txtProducto_cantidad = new javax.swing.JTextField();
         txtProductos_foto = new javax.swing.JTextField();
         btnProductos_busqueda_confirmar = new javax.swing.JButton();
         txtProductos_categoriaid = new javax.swing.JTextField();
         lblProducto_categoriaid = new javax.swing.JLabel();
+        lblProductos_precio_total = new javax.swing.JLabel();
+        btnProducto_actualizar = new javax.swing.JButton();
+        lblProductos_preciototal_texto = new javax.swing.JLabel();
 
         jMenuItem1.setText("jMenuItem1");
         popProductos_agregar.add(jMenuItem1);
@@ -703,10 +752,10 @@ public class vInventario extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("jButton3");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnProductos_confirmar.setText("Confirmar");
+        btnProductos_confirmar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnProductos_confirmarActionPerformed(evt);
             }
         });
 
@@ -754,9 +803,9 @@ public class vInventario extends javax.swing.JFrame {
             }
         });
 
-        cantidad.addActionListener(new java.awt.event.ActionListener() {
+        txtProducto_cantidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cantidadActionPerformed(evt);
+                txtProducto_cantidadActionPerformed(evt);
             }
         });
 
@@ -781,6 +830,17 @@ public class vInventario extends javax.swing.JFrame {
 
         lblProducto_categoriaid.setText("ID Categoria");
 
+        lblProductos_precio_total.setText("jLabel1");
+
+        btnProducto_actualizar.setText("Actualizar");
+        btnProducto_actualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProducto_actualizarActionPerformed(evt);
+            }
+        });
+
+        lblProductos_preciototal_texto.setText("Precio total Inventario");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -788,7 +848,17 @@ public class vInventario extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(265, 265, 265)
                 .addComponent(lblInformacion_productos)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnProducto_actualizar)
+                        .addGap(49, 49, 49)
+                        .addComponent(lblProductos_precio_total)
+                        .addGap(132, 132, 132))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(137, 137, 137)
+                        .addComponent(lblProductos_preciototal_texto)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(lblPanel_de_control_productos)
                 .addGap(92, 92, 92))
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -831,7 +901,7 @@ public class vInventario extends javax.swing.JFrame {
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(txtProductos_productoid, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(btnProductos_eliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                            .addComponent(btnProductos_confirmar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(lblProducto_precio)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -843,7 +913,7 @@ public class vInventario extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(lblProducto_cantidad)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(cantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtProducto_cantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(lblProducto_foto)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -853,13 +923,20 @@ public class vInventario extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(23, 23, 23)
                         .addComponent(lblInformacion_productos, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(15, 15, 15)
-                        .addComponent(lblPanel_de_control_productos, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lblProductos_preciototal_texto)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblProductos_precio_total)
+                                    .addComponent(btnProducto_actualizar)))
+                            .addComponent(lblPanel_de_control_productos, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -869,11 +946,11 @@ public class vInventario extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnProductos_modificar)
-                            .addComponent(jButton3))
+                            .addComponent(btnProductos_confirmar))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblProducto_productoid)
-                            .addComponent(txtProductos_productoid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtProductos_productoid, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblProducto_productoid))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblProducto_nombre)
@@ -885,7 +962,7 @@ public class vInventario extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblProducto_cantidad)
-                            .addComponent(cantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtProducto_cantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtProductos_foto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -933,17 +1010,22 @@ public class vInventario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnProductos_agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductos_agregarActionPerformed
-        // Habilitar los campos de texto
+        // Llamar al método tblProductosMouseClicked para cargar la información del producto seleccionado en los campos de texto
+        tblProductosMouseClicked(null);
+
+
+
+// Habilitar los campos de texto
         txtProductos_nombre.setEnabled(true);
         txtProductos_precio.setEnabled(true);
-        cantidad.setEnabled(true);
+        txtProducto_cantidad.setEnabled(true);
         txtProductos_foto.setEnabled(true);
         txtProductos_categoriaid.setEnabled(true);
 
         // Limpiar los campos de texto
         txtProductos_nombre.setText("");
         txtProductos_precio.setText("");
-        cantidad.setText("");
+        txtProducto_cantidad.setText("");
         txtProductos_foto.setText("");
         txtProductos_categoriaid.setText("");
     }
@@ -959,13 +1041,54 @@ public class vInventario extends javax.swing.JFrame {
 
     private void btnProductos_modificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductos_modificarActionPerformed
         
+        // Habilitar los campos de texto
+        txtProductos_nombre.setEnabled(true);
+        txtProductos_precio.setEnabled(true);
+        txtProducto_cantidad.setEnabled(true);
+        txtProductos_foto.setEnabled(true);
+        txtProductos_categoriaid.setEnabled(true);
+        
+        // Obtener el ID del producto seleccionado en la tabla
         int productoID = Integer.parseInt(txtProductos_productoid.getText());
 
+        // Obtener el nombre del producto del campo de texto
         String nombre = txtProductos_nombre.getText();
-        float precio = Float.parseFloat(txtProductos_precio.getText());
-        int stock = Integer.parseInt(cantidad.getText());
+
+        // Obtener el precio del producto del campo de texto y convertirlo a flotante
+        float precio = 0;
+        try {
+            precio = Float.parseFloat(txtProductos_precio.getText());
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Por favor, ingrese un precio válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Obtener el stock del producto del campo de texto y convertirlo a entero
+        int stock = 0;
+        try {
+            stock = Integer.parseInt(txtProducto_cantidad.getText());
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Por favor, ingrese un stock válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Obtener la URL de la foto del producto del campo de texto
         String foto = txtProductos_foto.getText();
-        int categoriaID = Integer.parseInt(txtProductos_categoriaid.getText());
+
+        // Obtener el ID de la categoría del producto del campo de texto y convertirlo a entero
+        int categoriaID = 0;
+        try {
+            categoriaID = Integer.parseInt(txtProductos_categoriaid.getText());
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Por favor, ingrese un ID de categoría válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Verificar si algún campo está vacío
+        if (nombre.isEmpty() || foto.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         // Crear un nuevo objeto Producto con los datos modificados
         Productos productoModificado = new Productos(productoID, nombre, precio, stock, foto, categoriaID);
@@ -974,17 +1097,13 @@ public class vInventario extends javax.swing.JFrame {
         DAO_Productos daoProductos = new DAO_Productos();
         boolean modificado = daoProductos.modificar(productoModificado);
 
-        // Mostrar mensaje status
+        // Mostrar mensaje de estado
         if (modificado) {
             JOptionPane.showMessageDialog(null, "Producto modificado correctamente");
             CargarTablaProductos();
         } else {
             // Verificar si el producto que se intenta modificar existe en la base de datos
-            if (!daoProductos.existeProducto(productoID)) {
-                JOptionPane.showMessageDialog(null, "El producto con ID " + productoID + " no existe en la base de datos");
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al modificar el producto");
-            }
+            JOptionPane.showMessageDialog(null, "Error al modificar el producto");
         }
     }//GEN-LAST:event_btnProductos_modificarActionPerformed
 
@@ -1011,9 +1130,9 @@ public class vInventario extends javax.swing.JFrame {
                 } else {
                     JOptionPane.showMessageDialog(null, "Error al eliminar el producto");
                 }
-            } else {
-                // Si el producto no existe mostrar un mensaje 
-                JOptionPane.showMessageDialog(null, "El producto con ID " + productoID + " no existe");
+            } else {               
+             JOptionPane.showMessageDialog(null, "Error al eliminar el producto");
+
             }
         } else {
 
@@ -1023,12 +1142,12 @@ public class vInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnProductos_eliminarActionPerformed
 
     private void btnProductos_busqueda_confirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductos_busqueda_confirmarActionPerformed
-        // Obtener los valores de los campos de búsqueda
+        // Obtener los valores de los campos de busqueda
         String nombre = txtProducto_nombre.getText();
         String productoIDText = txtProducto_productoid.getText();
         String categoriaIDText = txtProducto_categoriaid.getText();
 
-        // Validar si los campos están vacios
+        // Validar si los campos estan vacios
         boolean filtroVacio = nombre.isEmpty() && productoIDText.isEmpty() && categoriaIDText.isEmpty();
 
         // Declarar las variables para almacenar los valores convertidos a int
@@ -1045,12 +1164,12 @@ public class vInventario extends javax.swing.JFrame {
             }
         }
 
-        // Verificar si se ha proporcionado un valor para la categoría y si es un numero valido
+        // Verificar si se ha proporcionado un valor para la categoria y si es un numero valido
         if (!categoriaIDText.isEmpty()) {
             try {
                 categoriaID = Integer.parseInt(categoriaIDText);
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "El ID de la categoría debe ser un número entero válido.");
+                JOptionPane.showMessageDialog(null, "El ID de la categoria debe ser un numero entero válido.");
                 return; 
             }
         }
@@ -1087,9 +1206,9 @@ public class vInventario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtProductos_precioActionPerformed
 
-    private void cantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cantidadActionPerformed
+    private void txtProducto_cantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProducto_cantidadActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cantidadActionPerformed
+    }//GEN-LAST:event_txtProducto_cantidadActionPerformed
 
     private void txtProductos_fotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProductos_fotoActionPerformed
         // TODO add your handling code here:
@@ -1139,7 +1258,7 @@ public class vInventario extends javax.swing.JFrame {
             txtCategoria_modificar_nombre.setText(modelo.getValueAt(filaSeleccionada, 1).toString());
             txtCategoria_modificar_descripcion.setText(modelo.getValueAt(filaSeleccionada, 2).toString());
 
-            // Habilitar los campos de texto para permitir la edicion
+            // Habilitar los campos de texto 
             txtCategoria_modificar_nombre.setEnabled(true);
             txtCategoria_modificar_descripcion.setEnabled(true);
 
@@ -1189,7 +1308,7 @@ public class vInventario extends javax.swing.JFrame {
                     txtCategoria_modificar_nombre.setEnabled(false);
                     txtCategoria_modificar_descripcion.setEnabled(false);
 
-                    // Desactivar el botón Confirmar
+                    // Desactivar el boton Confirmar
                     btnCategoria_modificar_confirmar.setEnabled(false);
 
                     // Limpiar los campos de texto
@@ -1211,14 +1330,14 @@ public class vInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCategoria_modificar_confirmarActionPerformed
 
     private void btnCategoria_agregar_confirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCategoria_agregar_confirmarActionPerformed
-        // Capturar la información del usuario desde los campos de texto
+        // Capturar la informacion de texto
         String nombreCategoria = txtCategoria_agregar_nombre.getText();
         String descripcionCategoria = txtCategoria_agregar_descripcion.getText();
 
-        // Verificar si tanto el nombre como la descripción están presentes
+        // Verificar si tanto el nombre como la descripcions
         if (nombreCategoria.isEmpty() || descripcionCategoria.isEmpty()) {
-            // Si alguno de los campos está vacío, mostrar un mensaje de error y salir del método
-            JOptionPane.showMessageDialog(null, "Debe ingresar tanto el nombre como la descripción de la categoría.", "Error", JOptionPane.ERROR_MESSAGE);
+            // Si alguno de los campos esta vacío, mostrar un mensaje de error y salir del método
+            JOptionPane.showMessageDialog(null, "Debe ingresar tanto el nombre como la descripcion de la categoria.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -1227,20 +1346,20 @@ public class vInventario extends javax.swing.JFrame {
         nuevaCategoria.setNombre_categoria(nombreCategoria);
         nuevaCategoria.setDescripcion(descripcionCategoria);
 
-        // Llamar al método insertar del DAO para guardar la nueva categoría
+        // Llamar al metodo insertar del DAO para guardar la nueva categoría
         boolean insertado = daoCategorias.insertar(nuevaCategoria);
 
         if (insertado) {
-            // Si se insertó correctamente, actualizar la tabla de categorías
+            // Si se inserto correctamente, actualizar la tabla de categorías
             CargarTablaCategorias();
             // Limpiar los campos de texto después de insertar
             txtCategoria_agregar_nombre.setText("");
             txtCategoria_agregar_descripcion.setText("");
-            // Opcional: mostrar un mensaje de éxito al usuario
-            JOptionPane.showMessageDialog(null, "Categoría agregada correctamente.");
+            // Mstrar un mensaje de éxito al usuario
+            JOptionPane.showMessageDialog(null, "Categoria agregada correctamente.");
         } else {
-            // Si ocurrió un error al insertar, mostrar un mensaje de error al usuario
-            JOptionPane.showMessageDialog(null, "Error al insertar la categoría.", "Error", JOptionPane.ERROR_MESSAGE);
+            // Si ocurrio un error mostrar un mensaje de error al usuario
+            JOptionPane.showMessageDialog(null, "Error al insertar la categoria.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     
     }//GEN-LAST:event_btnCategoria_agregar_confirmarActionPerformed
@@ -1267,7 +1386,7 @@ public class vInventario extends javax.swing.JFrame {
                 // Llamar al DAO para eliminar el proveedor
                 boolean eliminado = daoProveedores.eliminar(proveedorAEliminar);
 
-                // Verificar si la eliminación fue exitosa
+                // Verificar la eliminacion
                 if (eliminado) {
                     JOptionPane.showMessageDialog(null, "Proveedor eliminado correctamente.");
 
@@ -1280,38 +1399,38 @@ public class vInventario extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Error al eliminar el proveedor: " + ex.getMessage());
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Seleccione un proveedor para eliminar.");
+            JOptionPane.showMessageDialog(null, "Error al eliminar el proveedor.");
         }
 
     }//GEN-LAST:event_btnProveedor_eliminarActionPerformed
 
     private void btnProveedor_agregar_confirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedor_agregar_confirmarActionPerformed
-        // Capturar la información del usuario desde los campos de texto
+        // Capturar la informacion del usuario desde los campos de texto
         String nombreProveedor = txtProveedor_agregar_nombre.getText();
 
-        // Verificar si el nombre del proveedor está presente
+        // Verificar si el nombre del proveedor esta presente
         if (nombreProveedor.isEmpty()) {
-            // Si el campo está vacío, mostrar un mensaje de error y salir del método
+            // Si el campo esta vacio, mostrar un mensaje de error y salir del metodo
             JOptionPane.showMessageDialog(null, "Debe ingresar el nombre del proveedor.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Crear un objeto Proveedores con la información capturada
+        // Crear un objeto Proveedores con la informacion capturada
         Proveedores nuevoProveedor = new Proveedores();
         nuevoProveedor.setNombre_proveedor(nombreProveedor);
 
-        // Llamar al método insertar del DAO para guardar el nuevo proveedor
+        // Llamar al metodo insertar del DAO para guardar el nuevo proveedor
         boolean insertado = daoProveedores.insertar(nuevoProveedor);
 
         if (insertado) {
-            // Si se insertó correctamente, actualizar la tabla de proveedores
+            // Si se inserto correctamente, actualizar la tabla de proveedores
             CargarTablaProveedores();
-            // Limpiar el campo de texto después de insertar
+            // Limpiar el campo de texto despues de insertar
             txtProveedor_agregar_nombre.setText("");
-            // Opcional: mostrar un mensaje de éxito al usuario
+            // Opcional: mostrar un mensaje de exito al usuario
             JOptionPane.showMessageDialog(null, "Proveedor agregado correctamente.");
         } else {
-            // Si ocurrió un error al insertar, mostrar un mensaje de error al usuario
+            // Si ocurrio un error al insertar, mostrar un mensaje de error al usuario
             JOptionPane.showMessageDialog(null, "Error al insertar el proveedor.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnProveedor_agregar_confirmarActionPerformed
@@ -1327,10 +1446,10 @@ public class vInventario extends javax.swing.JFrame {
             // Obtener los datos de la fila seleccionada y cargarlos en los campos de texto
             txtProveedor_nombre.setText(modelo.getValueAt(filaSeleccionada, 1).toString());
 
-            // Habilitar los campos de texto para permitir la edición
+            // Habilitar los campos de texto 
             txtProveedor_nombre.setEnabled(true);
 
-            // Activar el botón Confirmar
+            // Activar el boton Confirmar
             txtProveedor_nombre.setEnabled(true);
         } else {
             JOptionPane.showMessageDialog(null, "Seleccione un proveedor para modificar.");
@@ -1341,9 +1460,9 @@ public class vInventario extends javax.swing.JFrame {
         // Obtener el nuevo valor del texto txtProveedor_nombre
         String nuevoNombre = txtProveedor_nombre.getText();
 
-        // Verificar si el campo está vacío
+        // Verificar si el campo esta vacio
         if (nuevoNombre.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "El nombre del proveedor no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El nombre del proveedor no puede estar vacio.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -1353,7 +1472,7 @@ public class vInventario extends javax.swing.JFrame {
         // Verificar si se ha seleccionado una fila
         if (filaSeleccionada != -1) {
             // Mostrar un mensaje de confirmación antes de modificar el proveedor
-            int opcion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que quieres modificar este proveedor?", "Confirmar modificación", JOptionPane.YES_NO_OPTION);
+            int opcion = JOptionPane.showConfirmDialog(null, "Estas seguro de que quieres modificar este proveedor?", "Confirmar modificacion", JOptionPane.YES_NO_OPTION);
             if (opcion == JOptionPane.YES_OPTION) {
                 try {
                     // Obtener el ID del proveedor seleccionado
@@ -1390,7 +1509,7 @@ public class vInventario extends javax.swing.JFrame {
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Seleccione un proveedor para modificar.");
+            JOptionPane.showMessageDialog(null, "Error al modificar el proveedor.");
         }
 
     }//GEN-LAST:event_btnProveedor_confirmarActionPerformed
@@ -1399,13 +1518,13 @@ public class vInventario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtProveedor_agregar_nombreActionPerformed
     
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnProductos_confirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductos_confirmarActionPerformed
         Productos nuevoProducto = new Productos();
         try {
-            // Verificar si todos los campos están llenos
+            // Verificar si todos los campos estan llenos
             if (txtProductos_nombre.getText().isEmpty()
                     || txtProductos_precio.getText().isEmpty()
-                    || cantidad.getText().isEmpty()
+                    || txtProducto_cantidad.getText().isEmpty()
                     || txtProductos_foto.getText().isEmpty()
                     || txtProductos_categoriaid.getText().isEmpty()) {
 
@@ -1416,16 +1535,16 @@ public class vInventario extends javax.swing.JFrame {
             // Asignar los datos al objeto nuevoProducto
             nuevoProducto.setNombre_producto(txtProductos_nombre.getText());
             nuevoProducto.setPrecio(Float.parseFloat(txtProductos_precio.getText()));
-            nuevoProducto.setInStock(Integer.parseInt(cantidad.getText()));
+            nuevoProducto.setInStock(Integer.parseInt(txtProducto_cantidad.getText()));
             nuevoProducto.setFoto(txtProductos_foto.getText());
 
-            // Asignar el ID de categoría obtenido del campo de texto
+            // Asignar el ID de categoria obtenido del campo de texto
             nuevoProducto.setCategoria_id(Integer.parseInt(txtProductos_categoriaid.getText()));
 
             // Crear una instancia de DAO_Productos
             DAO_Productos daoProductos = new DAO_Productos();
 
-            // Insertar el nuevo producto utilizando el método insertar de DAO_Productos
+            // Insertar el nuevo producto utilizando el metodo insertar de DAO_Productos
             boolean insertado = daoProductos.insertar(nuevoProducto);
 
             // Si el producto se inserta correctamente, mostrar un mensaje
@@ -1436,24 +1555,31 @@ public class vInventario extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Error al agregar el producto");
             }
         } catch (NumberFormatException ex) {
-            // Manejar la excepción si los valores numéricos no son válidos
-            String mensaje = "Por favor, ingrese valores numéricos válidos para ";
+            // Manejar la excepcion si los valores numericos no son validos
+            String mensaje = "Por favor, ingrese valores numericos validos para ";
             if (!esNumero(txtProductos_precio.getText())) {
                 mensaje += "Precio\n";
             }
-            if (!esNumero(cantidad.getText())) {
+            if (!esNumero(txtProducto_cantidad.getText())) {
                 mensaje += "Cantidad\n";
             }
             if (!esNumero(txtProductos_categoriaid.getText())) {
-                mensaje += "ID de categoría\n";
+                mensaje += "ID de categoria\n";
             }
             JOptionPane.showMessageDialog(null, mensaje);
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btnProductos_confirmarActionPerformed
 
     private void txtProductos_productoidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProductos_productoidActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtProductos_productoidActionPerformed
+
+    private void btnProducto_actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProducto_actualizarActionPerformed
+        tblProductosMouseClicked(null);
+
+        float totalProductos = daoProductos.calcularTotalProductos();
+        lblProductos_precio_total.setText("Total: $" + totalProductos);
+    }//GEN-LAST:event_btnProducto_actualizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1495,16 +1621,16 @@ public class vInventario extends javax.swing.JFrame {
     private javax.swing.JButton btnCategoria_modificar;
     private javax.swing.JButton btnCategoria_modificar_confirmar;
     private javax.swing.JButton btnCategorias_eliminar;
+    private javax.swing.JButton btnProducto_actualizar;
     private javax.swing.JButton btnProductos_agregar;
     private javax.swing.JButton btnProductos_busqueda_confirmar;
+    private javax.swing.JButton btnProductos_confirmar;
     private javax.swing.JButton btnProductos_eliminar;
     private javax.swing.JButton btnProductos_modificar;
     private javax.swing.JButton btnProveedor_agregar_confirmar;
     private javax.swing.JButton btnProveedor_confirmar;
     private javax.swing.JButton btnProveedor_eliminar;
     private javax.swing.JButton btnProveedor_modificar;
-    private javax.swing.JTextField cantidad;
-    private javax.swing.JButton jButton3;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -1536,6 +1662,8 @@ public class vInventario extends javax.swing.JFrame {
     private javax.swing.JLabel lblProducto_nombre;
     private javax.swing.JLabel lblProducto_precio;
     private javax.swing.JLabel lblProducto_productoid;
+    private javax.swing.JLabel lblProductos_precio_total;
+    private javax.swing.JLabel lblProductos_preciototal_texto;
     private javax.swing.JLabel lblProveedor_agregar_agregar;
     private javax.swing.JLabel lblProveedor_agregar_nombre;
     private javax.swing.JLabel lblProveedor_nombre;
@@ -1549,6 +1677,7 @@ public class vInventario extends javax.swing.JFrame {
     private javax.swing.JTextField txtCategoria_agregar_nombre;
     private javax.swing.JTextField txtCategoria_modificar_descripcion;
     private javax.swing.JTextField txtCategoria_modificar_nombre;
+    private javax.swing.JTextField txtProducto_cantidad;
     private javax.swing.JTextField txtProducto_categoriaid;
     private javax.swing.JTextField txtProducto_nombre;
     private javax.swing.JTextField txtProducto_productoid;
