@@ -1,0 +1,130 @@
+CREATE DATABASE Inventario;
+
+USE Inventario;
+
+CREATE TABLE Categorias (
+    categoria_id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_categoria VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Productos (
+    producto_id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_producto VARCHAR(50) NOT NULL,
+    precio FLOAT NOT NULL,
+    inStock INT NOT NULL,
+    foto VARCHAR(100) NOT NULL,
+    categoria_id INT NOT NULL,
+    FOREIGN KEY (categoria_id) REFERENCES Categorias(categoria_id)
+);
+
+CREATE TABLE Tipos_Procesos (
+    proceso_id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_proceso VARCHAR(50) NOT NULL, -- Adjusted the length to match typical process names
+    descripcion VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Detalles_Procesos (
+    detalle_proceso_id INT AUTO_INCREMENT PRIMARY KEY,
+    producto_id INT NOT NULL,
+    proceso_id INT NOT NULL,
+    FOREIGN KEY (producto_id) REFERENCES Productos(producto_id),
+    FOREIGN KEY (proceso_id) REFERENCES Tipos_Procesos(proceso_id)
+);
+
+CREATE TABLE Proveedores (
+    proveedor_id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_proveedor VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Detalles_Productos (
+    detalle_producto_id INT AUTO_INCREMENT PRIMARY KEY,
+    producto_id INT NOT NULL,
+    proveedor_id INT NOT NULL,
+    FOREIGN KEY (producto_id) REFERENCES Productos(producto_id),
+    FOREIGN KEY (proveedor_id) REFERENCES Proveedores(proveedor_id)
+);
+
+
+USE Inventario;
+
+-- Insertar datos en la tabla Categorias
+INSERT INTO Categorias (nombre_categoria, descripcion)
+VALUES 
+('Electrónica', 'Dispositivos y gadgets electrónicos'),
+('Hogar', 'Artículos para el hogar'),
+('Ropa', 'Vestimenta y accesorios'),
+('Juguetes', 'Juguetes y juegos'),
+('Libros', 'Libros y revistas'),
+('Deportes', 'Equipo y ropa deportiva'),
+('Salud', 'Productos de salud y bienestar'),
+('Belleza', 'Productos de belleza y cuidado personal'),
+('Alimentos', 'Comestibles y bebidas'),
+('Bebés', 'Productos para bebés'),
+('Automotriz', 'Accesorios y piezas para autos'),
+('Mascotas', 'Productos para mascotas'),
+('Jardinería', 'Herramientas y suministros de jardinería'),
+('Oficina', 'Suministros y muebles de oficina'),
+('Joyería', 'Joyas y bisutería'),
+('Muebles', 'Mobiliario para el hogar y oficina'),
+('Herramientas', 'Herramientas y equipos'),
+('Instrumentos Musicales', 'Instrumentos y accesorios musicales'),
+('Videojuegos', 'Consolas y juegos de video'),
+('Fotografía', 'Cámaras y equipos de fotografía'),
+('Viajes', 'Artículos de viaje y equipaje'),
+('Relojes', 'Relojes de pulsera y de pared'),
+('Arte', 'Obras de arte y suministros'),
+('Papelería', 'Artículos de papelería'),
+('Accesorios', 'Accesorios diversos');
+
+-- Insertar datos en la tabla Proveedores
+INSERT INTO Proveedores (nombre_proveedor)
+VALUES 
+('TechStore'), ('HomeGoods'), ('FashionHub'), ('ToyWorld'), ('BookDepot'),
+('SportGear'), ('HealthPlus'), ('BeautyShop'), ('FoodMarket'), ('BabyCenter'),
+('AutoParts'), ('PetSupplies'), ('GardenTools'), ('OfficeMax'), ('JewelCraft'),
+('FurnitureCo'), ('ToolBox'), ('MusicStore'), ('GameCenter'), ('PhotoWorld'),
+('TravelEssentials'), ('WatchShop'), ('ArtStudio'), ('StationeryShop'), ('AccessorySpot');
+
+-- Insertar datos en la tabla Productos
+INSERT INTO Productos (nombre_producto, precio, inStock, foto, categoria_id)
+VALUES 
+('Smartphone', 699.99, 150, 'smartphone.jpg', 1),
+('Blender', 49.99, 80, 'blender.jpg', 2),
+('T-shirt', 19.99, 200, 'tshirt.jpg', 3),
+('Action Figure', 29.99, 100, 'action_figure.jpg', 4),
+('Novel', 15.99, 120, 'novel.jpg', 5),
+('Running Shoes', 89.99, 90, 'running_shoes.jpg', 6),
+('Vitamin C', 14.99, 140, 'vitamin_c.jpg', 7),
+('Shampoo', 9.99, 160, 'shampoo.jpg', 8),
+('Organic Coffee', 12.99, 110, 'organic_coffee.jpg', 9),
+('Baby Stroller', 199.99, 50, 'baby_stroller.jpg', 10),
+('Car Battery', 129.99, 60, 'car_battery.jpg', 11),
+('Dog Food', 24.99, 70, 'dog_food.jpg', 12),
+('Lawn Mower', 249.99, 40, 'lawn_mower.jpg', 13),
+('Office Chair', 149.99, 90, 'office_chair.jpg', 14),
+('Gold Necklace', 499.99, 30, 'gold_necklace.jpg', 15),
+('Sofa', 899.99, 20, 'sofa.jpg', 16),
+('Drill', 59.99, 100, 'drill.jpg', 17),
+('Guitar', 199.99, 50, 'guitar.jpg', 18),
+('Gaming Console', 399.99, 80, 'gaming_console.jpg', 19),
+('Digital Camera', 599.99, 60, 'digital_camera.jpg', 20),
+('Travel Backpack', 79.99, 70, 'travel_backpack.jpg', 21),
+('Wristwatch', 149.99, 90, 'wristwatch.jpg', 22),
+('Canvas', 29.99, 200, 'canvas.jpg', 23),
+('Notebook', 4.99, 300, 'notebook.jpg', 24),
+('Sunglasses', 19.99, 180, 'sunglasses.jpg', 25);
+
+
+-- Insertar datos en la tabla Tipos_Procesos
+INSERT INTO Tipos_Procesos (proceso_id, nombre_proceso, descripcion)
+VALUES 
+(1, 'Producto Insertar', 'Producto fue ingresado'),
+(2, 'Producto Eliminar', 'Producto fue eliminado'),
+(3, 'Producto Modificar', 'Producto fue modificado'),
+(4, 'Categoria Insertar', 'Categoria fue ingresada'),
+(5, 'Categoria Eliminar', 'Categoria fue eliminada'),
+(6, 'Categoria Modificar', 'Categoria fue modificada'),
+(7, 'Proveedor Insertar', 'Proveedor fue ingresado'),
+(8, 'Proveedor Eliminar', 'Proveedor fue eliminado'),
+(9, 'Proveedor Modificar', 'Proveedor fue modificado');
